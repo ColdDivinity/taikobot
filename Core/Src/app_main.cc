@@ -49,6 +49,15 @@ void AppMain() {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* tim) {
   if (tim->Instance == TIM14) {
     static int64_t time_ms = 0;
+    static bool started = false;
+
+    if (!started && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_SET) {
+      started = true;
+    }
+
+    if (!started) {
+      return;
+    }
 
     time_ms += kTimerPeriodMs;
 
